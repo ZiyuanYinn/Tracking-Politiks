@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>index.html</title>
+  <style>
+:root{
+  --bg:#f6f7fb;
+  --panel:rgba(255,255,255,.78);
+  --panel2:rgba(255,255,255,.72);
+  --card:rgba(255,255,255,.70);
+  --card2:rgba(255,255,255,.62);
+  --text:#0f172a;
+  --muted:#475569;
+  --accent:#6d28d9;
+  --accent2:#16a34a;
+  --warn:#ef4444;
+  --line:rgba(15,23,42,.10);
+  --shadow: 0 14px 34px rgba(2,6,23,.10);
+  --radius:18px;
+  --radius2:14px;
+  --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  font-family:var(--font);
+  color:var(--text);
+  background:
+    radial-gradient(1000px 680px at 12% 0%, rgba(109,40,217,.12), transparent 60%),
+    radial-gradient(1000px 680px at 95% 10%, rgba(22,163,74,.10), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #f5f6f8 52%, #ffffff 100%);
+}
+body{
+  margin:0;
+  font-family:var(--font);
+  color:var(--text);
+  background:
+    radial-gradient(1000px 680px at 12% 0%, rgba(109,40,217,.12), transparent 60%),
+    radial-gradient(1000px 680px at 95% 10%, rgba(22,163,74,.10), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #f5f6f8 52%, #ffffff 100%);
+}
+
+a{color:#93c5fd; text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:1200px; margin:0 auto; padding:20px}
+.topbar{
+  position:relative;
+  z-index:1000;
+
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; padding:14px 18px;
+  background: var(--panel);
+  border:1px solid rgba(15,23,42,.10);
+  border-radius: var(--radius);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 18px 40px rgba(2,6,23,.12);
+}
+.brand{
+  display:flex; align-items:center; gap:12px;
+  font-weight:800; letter-spacing:.2px;
+}
+.logo{
+  width:34px; height:34px; border-radius:10px;
+  background: conic-gradient(from 210deg, var(--accent), #60a5fa, var(--accent2), var(--accent));
+  box-shadow: 0 8px 20px rgba(109,40,217,.25);
+}
+.brand span{font-size:18px}
+.subtle{font-weight:600; color:var(--muted); font-size:12px}
+
+.burger{
+  width:44px; height:44px; border-radius:14px;
+  border:1px solid rgba(15,23,42,.10);
+  background: rgba(255,255,255,.80);
+  color:var(--text);
+  cursor:pointer;
+  display:grid; place-items:center;
+  transition: transform .08s ease, border-color .2s ease;
+}
+.burger:hover{border-color: rgba(255,255,255,.18)}
+.burger:active{transform: scale(.98)}
+.bars{display:flex; flex-direction:column; gap:5px}
+.bars i{display:block; width:18px; height:2px; background:rgba(255,255,255,.85); border-radius:2px}
+
+.menu{
+  position:relative;
+  z-index:2000;
+
+  position:relative;
+}
+.dropdown{
+  z-index:2000;
+
+  position:absolute; right:0; top:54px;
+  width:200px;
+  background: rgba(255,255,255,.96);
+  border:1px solid rgba(15,23,42,.10);
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(2,6,23,.12);
+  overflow:hidden;
+  display:none;
+}
+.dropdown.open{display:block}
+.dropdown a{
+  display:block; padding:12px 14px;
+  color:var(--text);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.dropdown a:last-child{border-bottom:0}
+.dropdown a:hover{background: rgba(109,40,217,.10)}
+
+.grid{
+  display:grid;
+  grid-template-columns: 2fr 1fr;
+  gap:18px;
+  margin-top:18px;
+}
+
+.panel{
+  background: var(--panel2);
+  border:1px solid rgba(15,23,42,.10);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 40px rgba(2,6,23,.12);
+  padding:16px;
+  backdrop-filter: blur(10px);
+}
+
+.panel h2{
+  margin:0 0 12px 0; font-size:14px; letter-spacing:.2px;
+  color: rgba(15,23,42,.92);
+}
+.panel .hint{color:var(--muted); font-size:12px; margin-top:2px}
+
+.cards{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:12px;
+}
+.card{
+  position:relative;
+  border-radius: var(--radius2);
+  border:1px solid rgba(255,255,255,.10);
+  background: linear-gradient(180deg, rgba(255,255,255,.84), rgba(255,255,255,.70));
+  padding:14px;
+  cursor:pointer;
+  transition: transform .12s ease, border-color .2s ease, background .2s ease;
+}
+.card:hover{transform: translateY(-1px); border-color: rgba(255,255,255,.18)}
+.card:active{transform: translateY(0px)}
+.live-dot{
+  position:absolute; left:12px; top:12px;
+  width:10px; height:10px; border-radius:50%;
+  background: var(--warn);
+  box-shadow: 0 0 0 4px rgba(239,68,68,.16), 0 0 14px rgba(239,68,68,.45);
+}
+.card-header{
+  display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+  padding-left:18px;
+}
+.card-title{font-weight:800; font-size:14px}
+.badges{display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end}
+.badge{
+  font-size:11px; padding:4px 8px; border-radius:999px;
+  border:1px solid rgba(255,255,255,.10);
+  color: rgba(15,23,42,.92);
+  background: rgba(255,255,255,.80);
+}
+.badge.entity{background: rgba(109,40,217,.14); border-color: rgba(109,40,217,.32)}
+.badge.issue{background: rgba(34,197,94,.16); border-color: rgba(34,197,94,.25)}
+.card-meta{color:var(--muted); font-size:12px; margin-top:6px; padding-left:18px}
+
+.create-card{
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  font-weight:800; color: rgba(15,23,42,.95);
+  background: linear-gradient(180deg, rgba(109,40,217,.12), rgba(255,255,255,.70));
+  border-style:dashed;
+}
+.plus{
+  width:28px; height:28px; border-radius:10px;
+  display:grid; place-items:center;
+  border:1px solid rgba(255,255,255,.20);
+  background: rgba(255,255,255,.72);
+}
+.plus svg{opacity:.95}
+
+.tool-buttons{
+  display:flex; flex-direction:column; gap:10px;
+}
+.tool-btn{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px;
+  padding:12px 12px;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.72);
+  cursor:pointer;
+  transition: border-color .2s ease, transform .08s ease, background .2s ease;
+}
+.tool-btn:hover{border-color: rgba(255,255,255,.18); background: rgba(109,40,217,.08)}
+.tool-btn:active{transform: scale(.99)}
+.tool-left{display:flex; align-items:center; gap:10px}
+.icon{
+  width:34px; height:34px; border-radius:12px;
+  display:grid; place-items:center;
+  background: rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+}
+.tool-title{font-weight:800; font-size:13px}
+.tool-desc{color:var(--muted); font-size:12px; margin-top:2px}
+.pill{
+  font-size:11px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.10);
+  color: rgba(15,23,42,.92);
+  background: rgba(255,255,255,.82);
+}
+
+.footer-note{
+  color: rgba(15,23,42,.55);
+  font-size:12px;
+  margin-top:10px;
+}
+
+/* Forms */
+.form-grid{
+  display:grid;
+  grid-template-columns: 2fr 1fr;
+  gap:16px;
+}
+.form{
+  display:flex; flex-direction:column; gap:12px;
+}
+.field label{display:block; font-size:12px; color:rgba(255,255,255,.78); margin:0 0 6px 2px}
+.input, select{
+  width:100%;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.72);
+  color: var(--text);
+  padding:12px 12px;
+  outline:none;
+}
+.input:focus, select:focus{border-color: rgba(109,40,217,.45); box-shadow: 0 0 0 4px rgba(109,40,217,.16)}
+.row2{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
+
+.checks{
+  display:grid; grid-template-columns: 1fr 1fr; gap:10px;
+  padding:12px; border-radius:16px;
+  background: rgba(255,255,255,.70);
+  border:1px solid rgba(255,255,255,.10);
+}
+.checks .topline{grid-column:1 / -1; display:flex; align-items:center; justify-content:space-between}
+.checks .topline span{font-size:12px; color:rgba(255,255,255,.78)}
+.small-btn{
+  font-size:12px;
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.82);
+  color: var(--text);
+  cursor:pointer;
+}
+.small-btn:hover{border-color: rgba(255,255,255,.18)}
+.chk{
+  display:flex; align-items:center; gap:10px;
+  padding:10px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.72);
+}
+.chk input{accent-color: var(--accent)}
+.chk span{font-size:12px; color: rgba(255,255,255,.90)}
+.bio{
+  border-radius: 18px;
+  border:1px solid rgba(15,23,42,.10);
+  background: rgba(255,255,255,.86);
+  padding:14px;
+  min-height: 220px;
+  box-shadow: 0 14px 34px rgba(2,6,23,.08);
+}
+.bio h3{margin:0 0 6px 0; font-size:14px}
+.bio .muted{color:var(--muted); font-size:12px; margin:0 0 10px 0}
+.kv{display:grid; grid-template-columns: 120px 1fr; gap:8px; font-size:12px}
+.kv div{padding:6px 0; border-bottom:1px solid rgba(15,23,42,.08)}
+.kv div:nth-last-child(-n+2){border-bottom:0}
+
+.primary{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:12px 14px;
+  border-radius: 14px;
+  border:1px solid rgba(109,40,217,.35);
+  background: rgba(109,40,217,.18);
+  color: rgba(15,23,42,.95);
+  cursor:pointer;
+  font-weight:800;
+}
+.primary:hover{border-color: rgba(109,40,217,.55)}
+.primary svg{opacity:.95}
+
+/* Evidence packet */
+.tabs{
+  display:flex; gap:8px; flex-wrap:wrap;
+  margin: 10px 0 0 0;
+}
+.tab{
+  font-size:12px;
+  padding:8px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.70);
+  color: rgba(15,23,42,.88);
+  cursor:pointer;
+}
+.tab.active{border-color: rgba(109,40,217,.45); background: rgba(109,40,217,.14)}
+.section{
+  margin-top:12px;
+  border-top:1px solid rgba(255,255,255,.08);
+  padding-top:12px;
+}
+.section h3{margin:0 0 10px 0; font-size:13px}
+.files{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+}
+.file{
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.70);
+  padding:12px;
+  display:flex; gap:10px;
+}
+.file .ficon{
+  width:38px; height:38px;
+  border-radius:14px;
+  display:grid; place-items:center;
+  background: rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+  flex: 0 0 38px;
+}
+.file .ftitle{font-weight:800; font-size:12px; margin:0}
+.file .fsum{color:var(--muted); font-size:12px; margin:6px 0 6px 0; line-height:1.35}
+.file .furl{font-size:12px}
+.social{
+  display:flex; flex-direction:column; gap:10px;
+}
+.post{
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.70);
+  padding:12px;
+}
+.post .meta{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:10px;
+  color: rgba(15,23,42,.74);
+  font-size:12px;
+  margin-bottom:8px;
+}
+.platform{
+  display:inline-flex; align-items:center; gap:8px;
+}
+.platform b{color:rgba(255,255,255,.92)}
+.hl{
+  padding:0 4px; border-radius:6px;
+  background: rgba(34,197,94,.16);
+  border:1px solid rgba(34,197,94,.22);
+}
+.hl2{
+  padding:0 4px; border-radius:6px;
+  background: rgba(109,40,217,.16);
+  border:1px solid rgba(109,40,217,.22);
+}
+.quote{
+  color: rgba(15,23,42,.92);
+  font-size:13px;
+  line-height:1.45;
+}
+.small-link{font-size:12px}
+
+/* Chatbot */
+.chat-fab{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  width:54px; height:54px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(109,40,217,.14);
+  box-shadow: 0 18px 40px rgba(2,6,23,.12);
+  cursor:pointer;
+  display:grid; place-items:center;
+}
+.chat-fab:hover{border-color: rgba(109,40,217,.55)}
+.chat-modal{
+  position:fixed; inset:0;
+  background: rgba(0,0,0,.55);
+  display:none;
+  align-items:flex-end;
+  justify-content:flex-end;
+  padding:18px;
+}
+.chat-modal.open{display:flex}
+.chat-window{
+  width:min(420px, 100%);
+  height: min(560px, 80vh);
+  border-radius: 22px;
+  background: rgba(17,26,46,.96);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow: 0 18px 40px rgba(2,6,23,.12);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.chat-head{
+  padding:12px 12px;
+  display:flex; align-items:center; justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.chat-head .title{font-weight:900; font-size:13px}
+.chat-head .x{cursor:pointer; width:34px; height:34px; border-radius:12px;
+  display:grid; place-items:center; border:1px solid rgba(255,255,255,.10); background: rgba(15,23,42,.55)}
+.chat-body{
+  margin:0;
+  font-family:var(--font);
+  color:var(--text);
+  background:
+    radial-gradient(1000px 680px at 12% 0%, rgba(109,40,217,.12), transparent 60%),
+    radial-gradient(1000px 680px at 95% 10%, rgba(22,163,74,.10), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #f5f6f8 52%, #ffffff 100%);
+}
+.msg{
+  max-width: 85%;
+  padding:10px 12px;
+  border-radius: 16px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.72);
+  font-size:13px;
+  line-height:1.35;
+}
+.msg.me{margin-left:auto; background: rgba(109,40,217,.14); border-color: rgba(109,40,217,.25)}
+.chat-foot{
+  padding:10px;
+  border-top:1px solid rgba(255,255,255,.08);
+  display:flex; gap:10px;
+}
+.chat-foot input{
+  flex:1;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.72);
+  color: var(--text);
+  padding:10px 12px;
+  outline:none;
+}
+.chat-foot button{
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(34,197,94,.16);
+  color: rgba(15,23,42,.95);
+  font-weight:900;
+  padding:10px 12px;
+  cursor:pointer;
+}
+.chat-foot button:hover{border-color: rgba(34,197,94,.35)}
+
+@media (max-width: 860px){
+  .grid{grid-template-columns: 1fr}
+  .form-grid{grid-template-columns: 1fr}
+  .files{grid-template-columns: 1fr}
+}
+
+.big-action{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:12px 16px;
+  border-radius: 14px;
+  border:1px solid rgba(109,40,217,.22);
+  background: rgba(109,40,217,.12);
+  font-weight:900;
+  font-size:13px;
+  cursor:pointer;
+}
+.big-action:hover{border-color: rgba(109,40,217,.32)}
+.big-action.secondary{
+  border-color: rgba(15,23,42,.12);
+  background: rgba(255,255,255,.82);
+}
+</style>
+  
+</head>
+<body data-page="index.html">
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo"></div>
+        <div>
+          <span>Tracking Politiks</span>
+        </div>
+      </div>
+      <div class="menu">
+        <button class="burger" id="burgerBtn" aria-label="Menu">
+          <span class="bars"><i></i><i></i><i></i></span>
+        </button>
+        <div class="dropdown" id="dropdown" role="menu" aria-label="Navigation">
+          <a href="index.html" data-nav="index.html">Home</a>
+          <a href="index.html#tools" data-nav="tools">Tools</a>
+          <a href="index.html#resources" data-nav="resources">Resources</a>
+          <a href="index.html#about" data-nav="about">About</a>
+        </div>
+      </div>
+    </div>
+
+    
+<div class="grid">
+  <div class="panel">
+    <h2>Live dashboards</h2>
+    <div class="hint">Select a dashboard to open its evidence packet. </div>
+
+    <div class="cards" style="margin-top:12px">
+      <div class="card" id="cardMamdani" title="Open evidence packet">
+        <span class="live-dot" aria-label="Live"></span>
+        <div class="card-header">
+          <div class="card-title">Mamdani on ICE</div>
+          <div class="badges">
+            <span class="badge entity">Entity: Mamdani</span>
+            <span class="badge issue">Issue: ICE</span>
+          </div>
+        </div>
+        <div class="card-meta">Tracking: floor speech, bills/votes, PRs, media, social — updated automatically.</div>
+      </div>
+
+      <div class="card" id="cardVance" title="Open evidence packet">
+        <span class="live-dot" aria-label="Live"></span>
+        <div class="card-header">
+          <div class="card-title">JD Vance on Health Care</div>
+          <div class="badges">
+            <span class="badge entity">Entity: JD Vance</span>
+            <span class="badge issue">Issue: Health Care</span>
+          </div>
+        </div>
+        <div class="card-meta">Tracking: statements, votes, press releases, media coverage — updated automatically.</div>
+      </div>
+
+      <div class="card create-card" id="createNew" title="Create a new dashboard">
+        <div class="plus" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        Create New
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="tools">
+    <h2>Investigative tools</h2>
+    <div class="hint">Quick analysis modules you can run on any evidence packet.</div>
+
+    <div class="tool-buttons" style="margin-top:12px">
+      <div class="tool-btn" id="hypocrisyBtn">
+        <div class="tool-left">
+          <div class="icon">⚖️</div>
+          <div>
+            <div class="tool-title">Hypocrisy Meter</div>
+            <div class="tool-desc">Detect contradictions between claims vs. votes & actions.</div>
+          </div>
+        </div>
+        <span class="pill">Demo</span>
+      </div>
+
+      <div class="tool-btn" id="progressBtn">
+        <div class="tool-left">
+          <div class="icon">📈</div>
+          <div>
+            <div class="tool-title">Progress Tracker</div>
+            <div class="tool-desc">Track narrative shifts & positions over time.</div>
+          </div>
+        </div>
+        <span class="pill">Demo</span>
+      </div>
+    </div>
+
+    <div class="section" id="resources" style="margin-top:14px">
+      <h3 style="margin:0 0 8px 0">Resources</h3>
+      <div class="hint">Where evidence comes from (planned): Congressional Record PDFs, official websites, and verified social links.</div>
+    </div>
+
+    <div class="section" id="about">
+      <h3 style="margin:0 0 8px 0">About</h3>
+      <div class="hint">Tracking Politiks helps journalists pull raw evidence fast (PDF-first), then summarize & query it with AI.</div>
+    </div>
+  </div>
+</div>
+
+
+    
+  </div>
+
+  <script>
+function qs(sel, root=document){ return root.querySelector(sel); }
+function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+
+function setupBurger(){
+  const btn = qs('#burgerBtn');
+  const dd = qs('#dropdown');
+  if(!btn || !dd) return;
+
+  btn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    dd.classList.toggle('open');
+  });
+  document.addEventListener('click', ()=>{
+    dd.classList.remove('open');
+  });
+}
+
+function setActiveNav(){
+  const page = document.body.dataset.page || '';
+  qsa('[data-nav]').forEach(a=>{
+    if(a.dataset.nav === page){ a.style.background = 'rgba(124,58,237,.16)'; }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  setupBurger();
+  setActiveNav();
+});
+</script>
+  <script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const goPacket = (entity, issue) => {
+    const url = `packet.html?entity=${encodeURIComponent(entity)}&issue=${encodeURIComponent(issue)}`;
+    window.location.href = url;
+  };
+
+  const mam = document.getElementById('cardMamdani');
+  const van = document.getElementById('cardVance');
+  const create = document.getElementById('createNew');
+
+  mam?.addEventListener('click', ()=> goPacket('Mamdani', 'ICE'));
+  van?.addEventListener('click', ()=> goPacket('JD Vance', 'Health Care'));
+  create?.addEventListener('click', ()=> window.location.href = 'create.html');
+
+  const toast = (text)=>{
+    const t = document.createElement('div');
+    t.textContent = text;
+    t.style.position='fixed';
+    t.style.left='50%';
+    t.style.bottom='18px';
+    t.style.transform='translateX(-50%)';
+    t.style.padding='10px 12px';
+    t.style.border='1px solid rgba(255,255,255,.14)';
+    t.style.borderRadius='14px';
+    t.style.background='rgba(17,26,46,.95)';
+    t.style.boxShadow='0 10px 30px rgba(0,0,0,.35)';
+    t.style.color='rgba(255,255,255,.92)';
+    t.style.zIndex='9999';
+    document.body.appendChild(t);
+    setTimeout(()=> t.remove(), 1600);
+  };
+
+  document.getElementById('hypocrisyBtn')?.addEventListener('click', ()=> toast('Hypocrisy Meter (demo): compares rhetoric vs. votes.'));
+  document.getElementById('progressBtn')?.addEventListener('click', ()=> toast('Progress Tracker (demo): shows stance changes over time.'));
+});
+</script>
+</body>
+</html>

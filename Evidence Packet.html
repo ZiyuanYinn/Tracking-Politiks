@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packet.html</title>
+  <style>
+:root{
+  --bg:#f6f7fb;
+  --panel:rgba(255,255,255,.78);
+  --panel2:rgba(255,255,255,.72);
+  --card:rgba(255,255,255,.70);
+  --card2:rgba(255,255,255,.62);
+  --text:#0f172a;
+  --muted:#475569;
+  --accent:#6d28d9;
+  --accent2:#16a34a;
+  --warn:#ef4444;
+  --line:rgba(15,23,42,.10);
+  --shadow: 0 14px 34px rgba(2,6,23,.10);
+  --radius:18px;
+  --radius2:14px;
+  --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  font-family:var(--font);
+  color:var(--text);
+  background:
+    radial-gradient(1000px 680px at 12% 0%, rgba(109,40,217,.12), transparent 60%),
+    radial-gradient(1000px 680px at 95% 10%, rgba(22,163,74,.10), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #f5f6f8 52%, #ffffff 100%);
+}
+body{
+  margin:0;
+  font-family:var(--font);
+  color:var(--text);
+  background:
+    radial-gradient(1000px 680px at 12% 0%, rgba(109,40,217,.12), transparent 60%),
+    radial-gradient(1000px 680px at 95% 10%, rgba(22,163,74,.10), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #f5f6f8 52%, #ffffff 100%);
+}
+
+a{color:#93c5fd; text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:1200px; margin:0 auto; padding:20px}
+.topbar{
+  position:relative;
+  z-index:1000;
+
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; padding:14px 18px;
+  background: var(--panel);
+  border:1px solid rgba(15,23,42,.10);
+  border-radius: var(--radius);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 18px 40px rgba(2,6,23,.12);
+}
+.brand{
+  display:flex; align-items:center; gap:12px;
+  font-weight:800; letter-spacing:.2px;
+}
+.logo{
+  width:34px; height:34px; border-radius:10px;
+  background: conic-gradient(from 210deg, var(--accent), #60a5fa, var(--accent2), var(--accent));
+  box-shadow: 0 8px 20px rgba(109,40,217,.25);
+}
+.brand span{font-size:18px}
+.subtle{font-weight:600; color:var(--muted); font-size:12px}
+
+.burger{
+  width:44px; height:44px; border-radius:14px;
+  border:1px solid rgba(15,23,42,.10);
+  background: rgba(255,255,255,.80);
+  color:var(--text);
+  cursor:pointer;
+  display:grid; place-items:center;
+  transition: transform .08s ease, border-color .2s ease;
+}
+.burger:hover{border-color: rgba(255,255,255,.18)}
+.burger:active{transform: scale(.98)}
+.bars{display:flex; flex-direction:column; gap:5px}
+.bars i{display:block; width:18px; height:2px; background:rgba(255,255,255,.85); border-radius:2px}
+
+.menu{
+  position:relative;
+  z-index:2000;
+
+  position:relative;
+}
+.dropdown{
+  z-index:2000;
+
+  position:absolute; right:0; top:54px;
+  width:200px;
+  background: rgba(255,255,255,.96);
+  border:1px solid rgba(15,23,42,.10);
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(2,6,23,.12);
+  overflow:hidden;
+  display:none;
+}
+.dropdown.open{display:block}
+.dropdown a{
+  display:block; padding:12px 14px;
+  color:var(--text);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.dropdown a:last-child{border-bottom:0}
+.dropdown a:hover{background: rgba(109,40,217,.10)}
+
+.grid{
+  display:grid;
+  grid-template-columns: 2fr 1fr;
+  gap:18px;
+  margin-top:18px;
+}
+
+.panel{
+  background: var(--panel2);
+  border:1px solid rgba(15,23,42,.10);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 40px rgba(2,6,23,.12);
+  padding:16px;
+  backdrop-filter: blur(10px);
+}
+
+.panel h2{
+  margin:0 0 12px 0; font-size:14px; letter-spacing:.2px;
+  color: rgba(15,23,42,.92);
+}
+.panel .hint{color:var(--muted); font-size:12px; margin-top:2px}
+
+.cards{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:12px;
+}
+.card{
+  position:relative;
+  border-radius: var(--radius2);
+  border:1px solid rgba(255,255,255,.10);
+  background: linear-gradient(180deg, rgba(255,255,255,.84), rgba(255,255,255,.70));
+  padding:14px;
+  cursor:pointer;
+  transition: transform .12s ease, border-color .2s ease, background .2s ease;
+}
+.card:hover{transform: translateY(-1px); border-color: rgba(255,255,255,.18)}
+.card:active{transform: translateY(0px)}
+.live-dot{
+  position:absolute; left:12px; top:12px;
+  width:10px; height:10px; border-radius:50%;
+  background: var(--warn);
+  box-shadow: 0 0 0 4px rgba(239,68,68,.16), 0 0 14px rgba(239,68,68,.45);
+}
+.card-header{
+  display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+  padding-left:18px;
+}
+.card-title{font-weight:800; font-size:14px}
+.badges{display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end}
+.badge{
+  font-size:11px; padding:4px 8px; border-radius:999px;
+  border:1px solid rgba(255,255,255,.10);
+  color: rgba(15,23,42,.92);
+  background: rgba(255,255,255,.80);
+}
+.badge.entity{background: rgba(109,40,217,.14); border-color: rgba(109,40,217,.32)}
+.badge.issue{background: rgba(34,197,94,.16); border-color: rgba(34,197,94,.25)}
+.card-meta{color:var(--muted); font-size:12px; margin-top:6px; padding-left:18px}
+
+.create-card{
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  font-weight:800; color: rgba(15,23,42,.95);
+  background: linear-gradient(180deg, rgba(109,40,217,.12), rgba(255,255,255,.70));
+  border-style:dashed;
+}
+.plus{
+  width:28px; height:28px; border-radius:10px;
+  display:grid; place-items:center;
+  border:1px solid rgba(255,255,255,.20);
+  background: rgba(255,255,255,.72);
+}
+.plus svg{opacity:.95}
+
+.tool-buttons{
+  display:flex; flex-direction:column; gap:10px;
+}
+.tool-btn{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px;
+  padding:12px 12px;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.72);
+  cursor:pointer;
+  transition: border-color .2s ease, transform .08s ease, background .2s ease;
+}
+.tool-btn:hover{border-color: rgba(255,255,255,.18); background: rgba(109,40,217,.08)}
+.tool-btn:active{transform: scale(.99)}
+.tool-left{display:flex; align-items:center; gap:10px}
+.icon{
+  width:34px; height:34px; border-radius:12px;
+  display:grid; place-items:center;
+  background: rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+}
+.tool-title{font-weight:800; font-size:13px}
+.tool-desc{color:var(--muted); font-size:12px; margin-top:2px}
+.pill{
+  font-size:11px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.10);
+  color: rgba(15,23,42,.92);
+  background: rgba(255,255,255,.82);
+}
+
+.footer-note{
+  color: rgba(15,23,42,.55);
+  font-size:12px;
+  margin-top:10px;
+}
+
+/* Forms */
+.form-grid{
+  display:grid;
+  grid-template-columns: 2fr 1fr;
+  gap:16px;
+}
+.form{
+  display:flex; flex-direction:column; gap:12px;
+}
+.field label{display:block; font-size:12px; color:rgba(255,255,255,.78); margin:0 0 6px 2px}
+.input, select{
+  width:100%;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.72);
+  color: var(--text);
+  padding:12px 12px;
+  outline:none;
+}
+.input:focus, select:focus{border-color: rgba(109,40,217,.45); box-shadow: 0 0 0 4px rgba(109,40,217,.16)}
+.row2{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
+
+.checks{
+  display:grid; grid-template-columns: 1fr 1fr; gap:10px;
+  padding:12px; border-radius:16px;
+  background: rgba(255,255,255,.70);
+  border:1px solid rgba(255,255,255,.10);
+}
+.checks .topline{grid-column:1 / -1; display:flex; align-items:center; justify-content:space-between}
+.checks .topline span{font-size:12px; color:rgba(255,255,255,.78)}
+.small-btn{
+  font-size:12px;
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.82);
+  color: var(--text);
+  cursor:pointer;
+}
+.small-btn:hover{border-color: rgba(255,255,255,.18)}
+.chk{
+  display:flex; align-items:center; gap:10px;
+  padding:10px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.72);
+}
+.chk input{accent-color: var(--accent)}
+.chk span{font-size:12px; color: rgba(255,255,255,.90)}
+.bio{
+  border-radius: 18px;
+  border:1px solid rgba(15,23,42,.10);
+  background: rgba(255,255,255,.86);
+  padding:14px;
+  min-height: 220px;
+  box-shadow: 0 14px 34px rgba(2,6,23,.08);
+}
+.bio h3{margin:0 0 6px 0; font-size:14px}
+.bio .muted{color:var(--muted); font-size:12px; margin:0 0 10px 0}
+.kv{display:grid; grid-template-columns: 120px 1fr; gap:8px; font-size:12px}
+.kv div{padding:6px 0; border-bottom:1px solid rgba(15,23,42,.08)}
+.kv div:nth-last-child(-n+2){border-bottom:0}
+
+.primary{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:12px 14px;
+  border-radius: 14px;
+  border:1px solid rgba(109,40,217,.35);
+  background: rgba(109,40,217,.18);
+  color: rgba(15,23,42,.95);
+  cursor:pointer;
+  font-weight:800;
+}
+.primary:hover{border-color: rgba(109,40,217,.55)}
+.primary svg{opacity:.95}
+
+/* Evidence packet */
+.tabs{
+  display:flex; gap:8px; flex-wrap:wrap;
+  margin: 10px 0 0 0;
+}
+.tab{
+  font-size:12px;
+  padding:8px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.70);
+  color: rgba(15,23,42,.88);
+  cursor:pointer;
+}
+.tab.active{border-color: rgba(109,40,217,.45); background: rgba(109,40,217,.14)}
+.section{
+  margin-top:12px;
+  border-top:1px solid rgba(255,255,255,.08);
+  padding-top:12px;
+}
+.section h3{margin:0 0 10px 0; font-size:13px}
+.files{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+}
+.file{
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.70);
+  padding:12px;
+  display:flex; gap:10px;
+}
+.file .ficon{
+  width:38px; height:38px;
+  border-radius:14px;
+  display:grid; place-items:center;
+  background: rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+  flex: 0 0 38px;
+}
+.file .ftitle{font-weight:800; font-size:12px; margin:0}
+.file .fsum{color:var(--muted); font-size:12px; margin:6px 0 6px 0; line-height:1.35}
+.file .furl{font-size:12px}
+.social{
+  display:flex; flex-direction:column; gap:10px;
+}
+.post{
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.70);
+  padding:12px;
+}
+.post .meta{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:10px;
+  color: rgba(15,23,42,.74);
+  font-size:12px;
+  margin-bottom:8px;
+}
+.platform{
+  display:inline-flex; align-items:center; gap:8px;
+}
+.platform b{color:rgba(255,255,255,.92)}
+.hl{
+  padding:0 4px; border-radius:6px;
+  background: rgba(34,197,94,.16);
+  border:1px solid rgba(34,197,94,.22);
+}
+.hl2{
+  padding:0 4px; border-radius:6px;
+  background: rgba(109,40,217,.16);
+  border:1px solid rgba(109,40,217,.22);
+}
+.quote{
+  color: rgba(15,23,42,.92);
+  font-size:13px;
+  line-height:1.45;
+}
+.small-link{font-size:12px}
+
+/* Chatbot */
+.chat-fab{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  width:54px; height:54px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(109,40,217,.14);
+  box-shadow: 0 18px 40px rgba(2,6,23,.12);
+  cursor:pointer;
+  display:grid; place-items:center;
+}
+.chat-fab:hover{border-color: rgba(109,40,217,.55)}
+.chat-modal{
+  position:fixed; inset:0;
+  background: rgba(0,0,0,.55);
+  display:none;
+  align-items:flex-end;
+  justify-content:flex-end;
+  padding:18px;
+}
+.chat-modal.open{display:flex}
+.chat-window{
+  width:min(420px, 100%);
+  height: min(560px, 80vh);
+  border-radius: 22px;
+  background: rgba(17,26,46,.96);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow: 0 18px 40px rgba(2,6,23,.12);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.chat-head{
+  padding:12px 12px;
+  display:flex; align-items:center; justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.chat-head .title{font-weight:900; font-size:13px}
+.chat-head .x{cursor:pointer; width:34px; height:34px; border-radius:12px;
+  display:grid; place-items:center; border:1px solid rgba(255,255,255,.10); background: rgba(15,23,42,.55)}
+.chat-body{
+  margin:0;
+  font-family:var(--font);
+  color:var(--text);
+  background:
+    radial-gradient(1000px 680px at 12% 0%, rgba(109,40,217,.12), transparent 60%),
+    radial-gradient(1000px 680px at 95% 10%, rgba(22,163,74,.10), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #f5f6f8 52%, #ffffff 100%);
+}
+.msg{
+  max-width: 85%;
+  padding:10px 12px;
+  border-radius: 16px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.72);
+  font-size:13px;
+  line-height:1.35;
+}
+.msg.me{margin-left:auto; background: rgba(109,40,217,.14); border-color: rgba(109,40,217,.25)}
+.chat-foot{
+  padding:10px;
+  border-top:1px solid rgba(255,255,255,.08);
+  display:flex; gap:10px;
+}
+.chat-foot input{
+  flex:1;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.72);
+  color: var(--text);
+  padding:10px 12px;
+  outline:none;
+}
+.chat-foot button{
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(34,197,94,.16);
+  color: rgba(15,23,42,.95);
+  font-weight:900;
+  padding:10px 12px;
+  cursor:pointer;
+}
+.chat-foot button:hover{border-color: rgba(34,197,94,.35)}
+
+@media (max-width: 860px){
+  .grid{grid-template-columns: 1fr}
+  .form-grid{grid-template-columns: 1fr}
+  .files{grid-template-columns: 1fr}
+}
+
+
+.big-action{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:12px 16px;
+  border-radius: 14px;
+  border:1px solid rgba(109,40,217,.22);
+  background: rgba(109,40,217,.12);
+  font-weight:900;
+  font-size:13px;
+  cursor:pointer;
+}
+.big-action:hover{border-color: rgba(109,40,217,.32)}
+.big-action.secondary{
+  border-color: rgba(15,23,42,.12);
+  background: rgba(255,255,255,.82);
+}
+</style>
+  
+</head>
+<body data-page="packet.html">
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo"></div>
+        <div>
+          <span>Tracking Politiks</span>
+        </div>
+      </div>
+      <div class="menu">
+        <button class="burger" id="burgerBtn" aria-label="Menu">
+          <span class="bars"><i></i><i></i><i></i></span>
+        </button>
+        <div class="dropdown" id="dropdown" role="menu" aria-label="Navigation">
+          <a href="index.html" data-nav="index.html">Home</a>
+          <a href="index.html#tools" data-nav="tools">Tools</a>
+          <a href="index.html#resources" data-nav="resources">Resources</a>
+          <a href="index.html#about" data-nav="about">About</a>
+        </div>
+      </div>
+    </div>
+
+    
+<div class="panel" style="margin-top:18px">
+  <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:wrap">
+    <div style="display:flex; align-items:center; gap:10px">
+      <span class="live-dot" aria-label="Live" style="position:relative; left:0; top:0"></span>
+      <div>
+        <div style="font-weight:900; font-size:16px" id="headline">Mamdani on ICE</div>
+        <div class="hint" id="rangeHint">Evidence packet</div>
+      </div>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+      <button class="big-action" id="genReport">Generate report</button>
+      <button class="big-action secondary" id="discussBtn">Discuss with Chatbot</button>
+      <a class="small-btn" href="create.html" id="editLink">← Edit dashboard</a>
+      <a class="small-btn" href="index.html">Home</a>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs" aria-label="Sections">
+    <button class="tab active" data-target="floor">Floor Speech</button>
+    <button class="tab" data-target="statements">Statements</button>
+    <button class="tab" data-target="bills">Bills/Votes</button>
+    <button class="tab" data-target="prs">PRs</button>
+    <button class="tab" data-target="media">Media reports</button>
+    <button class="tab" data-target="social">Social media</button>
+  </div>
+
+  <div class="section" id="floor">
+    <h3>Floor Speech</h3>
+    <div class="files" id="floorFiles"></div>
+  </div>
+
+  <div class="section" id="statements">
+    <h3>Statements</h3>
+    <div class="files" id="statementFiles"></div>
+  </div>
+
+  <div class="section" id="bills">
+    <h3>Bills/Votes</h3>
+    <div class="files" id="billFiles"></div>
+  </div>
+
+  <div class="section" id="prs">
+    <h3>Press Releases</h3>
+    <div class="files" id="prFiles"></div>
+  </div>
+
+  <div class="section" id="media">
+    <h3>Media reports</h3>
+    <div class="files" id="mediaFiles"></div>
+  </div>
+
+  <div class="section" id="social">
+    <h3>Social media</h3>
+    <div class="social" id="socialPosts"></div>
+  </div>
+</div>
+
+<button class="chat-fab" id="chatFab" aria-label="Open chatbot">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+    <path d="M21 12c0 4.418-4.03 8-9 8a10.3 10.3 0 0 1-2.63-.34L3 21l1.48-4.05A7.4 7.4 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M8 12h.01M12 12h.01M16 12h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+  </svg>
+</button>
+
+<div class="chat-modal" id="chatModal" aria-hidden="true">
+  <div class="chat-window" role="dialog" aria-label="Evidence Chat">
+    <div class="chat-head">
+      <div>
+        <div class="title">Evidence Chat</div>
+        <div class="subtle" style="margin-top:2px">Ask questions about the packet.</div>
+      </div>
+      <div class="x" id="chatClose" title="Close">✕</div>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="msg">Hi — I’m your evidence assistant. Try: “What’s the strongest evidence?” or “Summarize the social media reaction.”</div>
+    </div>
+    <div class="chat-foot">
+      <input id="chatInput" placeholder="Type a question…" />
+      <button id="chatSend">Send</button>
+    </div>
+  </div>
+</div>
+
+
+    
+  </div>
+
+  <script>
+function qs(sel, root=document){ return root.querySelector(sel); }
+function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+
+function setupBurger(){
+  const btn = qs('#burgerBtn');
+  const dd = qs('#dropdown');
+  if(!btn || !dd) return;
+
+  btn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    dd.classList.toggle('open');
+  });
+  document.addEventListener('click', ()=>{
+    dd.classList.remove('open');
+  });
+}
+
+function setActiveNav(){
+  const page = document.body.dataset.page || '';
+  qsa('[data-nav]').forEach(a=>{
+    if(a.dataset.nav === page){ a.style.background = 'rgba(124,58,237,.16)'; }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  setupBurger();
+  setActiveNav();
+});
+</script>
+  <script>
+function getParams(){
+  const p = new URLSearchParams(window.location.search);
+  return Object.fromEntries(p.entries());
+}
+
+function iconSVG(kind){
+  const label = (kind === 'pdf') ? 'PDF' : 'CSV';
+  return `<div style="width:100%;height:100%;display:grid;place-items:center;">
+    <div style="
+      font-weight:900;
+      letter-spacing:.6px;
+      font-size:11px;
+      padding:6px 8px;
+      border-radius:10px;
+      border:1px solid rgba(15,23,42,.18);
+      background: rgba(255,255,255,.86);
+      color: rgba(15,23,42,.92);
+    ">${label}</div>
+  </div>`;
+}
+
+function fileCard({kind, title, sum, url}){
+  return `
+  <div class="file">
+    <div class="ficon" aria-hidden="true">${iconSVG(kind)}</div>
+    <div>
+      <p class="ftitle">${title}</p>
+      <p class="fsum">${sum}</p>
+      <div class="furl"><a href="${url}" target="_blank" rel="noreferrer noopener">${url}</a></div>
+    </div>
+  </div>`;
+}
+
+function highlightTerms(text, terms){
+  let out = text;
+  terms.forEach(t=>{
+    const re = new RegExp(`\\b(${t.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')})\\b`, 'gi');
+    out = out.replace(re, `<span class="hl">$1</span>`);
+  });
+  return out;
+}
+
+function platformIcon(p){
+  const map = {
+    twitter: '𝕏',
+    facebook: 'f',
+    instagram: '⌁'
+  };
+  return map[p] || '•';
+}
+
+function postCard({platform, quote, url, terms=[]}){
+  const q = highlightTerms(quote, terms);
+  return `
+  <div class="post">
+    <div class="meta">
+      <div class="platform"><span class="pill">${platformIcon(platform)}</span> <b>${platform}</b></div>
+      <div class="small-link"><a href="${url}" target="_blank" rel="noreferrer noopener">Open</a></div>
+    </div>
+    <div class="quote">${q}</div>
+  </div>`;
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  const p = getParams();
+  const entity = p.entity || 'Mamdani';
+  const issue = p.issue || 'ICE';
+
+  const headline = document.getElementById('headline');
+  headline.textContent = `${entity} on ${issue}`;
+
+  const rangeHint = document.getElementById('rangeHint');
+  const start = p.start || '';
+  const end = p.end || '';
+  if(start || end){
+    rangeHint.textContent = `Evidence packet — range: ${start || '…'} to ${end || '…'}`;
+  }
+
+  const editLink = document.getElementById('editLink');
+  editLink.href = `create.html?entity=${encodeURIComponent(entity)}&issue=${encodeURIComponent(issue)}`;
+
+  // Demo files
+  const makeUrls = (prefix, n)=> Array.from({length:n}).map((_,i)=>`https://example.com/${prefix}/${(i+1).toString().padStart(2,'0')}`);
+
+  const floor = [
+    {kind:'pdf', title:'Floor speech: “Oversight of detention and enforcement”', sum:'Mentions ICE enforcement practices; calls for transparency; references local impacts.', url: makeUrls('congressional-record',1)[0]},
+    {kind:'pdf', title:'Hearing transcript excerpt (committee) — detention capacity', sum:'Flags conditions and procurement; cites watchdog reports; requests data.', url: makeUrls('hearing',1)[0]},
+    {kind:'pdf', title:'Statement entered into the record — “Due process & accountability”', sum:'Frames enforcement as a due-process issue; proposes oversight actions.', url: makeUrls('record-statement',1)[0]},
+  ];
+
+  const statements = [
+    {kind:'pdf', title:'Official statement: “Response to ICE actions”', sum:'Condemns a specific enforcement event; urges legal safeguards.', url: makeUrls('statements',1)[0]},
+    {kind:'pdf', title:'Town hall remarks (transcript)', sum:'Explains position; emphasizes community safety vs. enforcement tactics.', url: makeUrls('townhall',1)[0]},
+    {kind:'pdf', title:'Newsletter excerpt — constituent update', sum:'Highlights ongoing advocacy; provides calls-to-action and resources.', url: makeUrls('newsletter',1)[0]},
+  ];
+
+  const bills = [
+    {kind:'csv', title:'Votes CSV — related amendments (sample)', sum:'A structured table of votes that touch immigration enforcement / oversight.', url: makeUrls('votes',1)[0]},
+    {kind:'pdf', title:'Bill text PDF — “Oversight & reporting requirements” (sample)', sum:'Defines reporting obligations and oversight mechanisms.', url: makeUrls('bill',1)[0]},
+    {kind:'csv', title:'Bill sponsors CSV — co-sponsors (sample)', sum:'Lists sponsors/co-sponsors; provides party/state rollups.', url: makeUrls('cosponsors',1)[0]},
+  ];
+
+  const prs = [
+    {kind:'pdf', title:'Press release — “Accountability and transparency”', sum:'Announces a letter or initiative; includes quotes and demands.', url: makeUrls('press',1)[0]},
+    {kind:'pdf', title:'Press release — “Community response and resources”', sum:'Shares hotline/legal resources; frames issue as public-interest.', url: makeUrls('press',1)[0] + '#2'},
+  ];
+
+  const media = [
+    {kind:'pdf', title:'Media roundup PDF — local coverage (sample)', sum:'A packet of annotated headlines and extracts for quick newsroom review.', url: makeUrls('media',1)[0]},
+    {kind:'pdf', title:'Investigative article PDF print view (sample)', sum:'Highlights claims, key quotes, and contested facts for verification.', url: makeUrls('media',1)[0] + '#print'},
+  ];
+
+  const terms = [issue, 'ICE', 'detention', 'deportation'];
+
+  const social = [
+    {platform:'twitter', quote:`People keep arguing about ${issue}, but where is the actual evidence packet? This is exactly why journalists need raw PDFs, not vibes.`, url:'https://example.com/x/post/1', terms},
+    {platform:'twitter', quote:`If politicians talk tough on ${issue} while their votes say something else, that’s the story. Track the receipts.`, url:'https://example.com/x/post/2', terms},
+    {platform:'facebook', quote:`Serious question: what changes would make ${issue} enforcement more accountable? Oversight? Reporting? Independent audits?`, url:'https://example.com/facebook/post/1', terms},
+    {platform:'instagram', quote:`Swipe: what “accountability” looks like in practice — documents, votes, press releases. Not just slogans about ${issue}.`, url:'https://example.com/instagram/post/1', terms},
+  ];
+
+  const render = (id, items)=>{
+    const el = document.getElementById(id);
+    el.innerHTML = items.map(fileCard).join('');
+  };
+  render('floorFiles', floor);
+  render('statementFiles', statements);
+  render('billFiles', bills);
+  render('prFiles', prs);
+  render('mediaFiles', media);
+
+  const sp = document.getElementById('socialPosts');
+  sp.innerHTML = social.map(postCard).join('');
+
+  // Tabs scroll
+  const tabs = document.getElementById('tabs');
+  tabs.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.tab');
+    if(!btn) return;
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+    const target = document.getElementById(btn.dataset.target);
+    target.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+
+  // Report + Chat buttons
+  const genReport = document.getElementById('genReport');
+  genReport?.addEventListener('click', ()=>{
+    const toast = document.createElement('div');
+    toast.textContent = 'Generating report…';
+    toast.style.position='fixed';toast.style.left='50%';toast.style.top='18px';toast.style.transform='translateX(-50%)';
+    toast.style.padding='10px 12px';toast.style.border='1px solid rgba(15,23,42,.12)';toast.style.borderRadius='14px';
+    toast.style.background='rgba(255,255,255,.92)';toast.style.boxShadow='0 14px 34px rgba(2,6,23,.10)';
+    toast.style.zIndex='9999';
+    document.body.appendChild(toast);
+    setTimeout(()=> toast.remove(), 1600);
+  });
+
+  const discussBtn = document.getElementById('discussBtn');
+  // Chatbot
+  const chatFab = document.getElementById('chatFab');
+  const chatModal = document.getElementById('chatModal');
+  const chatClose = document.getElementById('chatClose');
+  const chatBody = document.getElementById('chatBody');
+  const chatInput = document.getElementById('chatInput');
+  const chatSend = document.getElementById('chatSend');
+
+  const addMsg = (text, me=false)=>{
+    const d = document.createElement('div');
+    d.className = 'msg' + (me ? ' me' : '');
+    d.innerHTML = text;
+    chatBody.appendChild(d);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  };
+
+  const scripted = (q)=>{
+    const s = q.toLowerCase();
+    if(s.includes('strongest') || s.includes('best evidence')){
+      return `For the demo, the strongest “paper trail” is: <span class="hl2">votes CSV</span> + <span class="hl2">bill text</span> + <span class="hl2">official statement PDFs</span>. Those let a reporter verify claims against actions.`;
+    }
+    if(s.includes('social')){
+      return `Social reaction in this demo clusters around <span class="hl2">${issue}</span> and <span class="hl2">ICE</span>: calls for “receipts,” oversight, and comparing rhetoric vs votes.`;
+    }
+    if(s.includes('summar') || s.includes('overview')){
+      return `This packet is organized by source type (floor speech, statements, votes, PRs, media, social). Each item has a short AI blurb plus a link to the raw record.`;
+    }
+    return `Demo answer: I can point you to relevant sections. Try asking “overview”, “strongest evidence”, or “social media reaction”.`;
+  };
+
+  discussBtn?.addEventListener('click', ()=>{
+    chatModal.classList.add('open');
+    chatModal.setAttribute('aria-hidden','false');
+    setTimeout(()=> chatInput.focus(), 50);
+  });
+
+  chatFab.addEventListener('click', ()=>{
+    chatModal.classList.add('open');
+    chatModal.setAttribute('aria-hidden','false');
+    setTimeout(()=> chatInput.focus(), 50);
+  });
+  chatClose.addEventListener('click', ()=>{
+    chatModal.classList.remove('open');
+    chatModal.setAttribute('aria-hidden','true');
+  });
+  chatModal.addEventListener('click', (e)=>{
+    if(e.target === chatModal){
+      chatModal.classList.remove('open');
+      chatModal.setAttribute('aria-hidden','true');
+    }
+  });
+
+  function send(){
+    const q = (chatInput.value || '').trim();
+    if(!q) return;
+    addMsg(q, true);
+    chatInput.value = '';
+    setTimeout(()=> addMsg(scripted(q), false), 250);
+  }
+  chatSend.addEventListener('click', send);
+  chatInput.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter') send();
+  });
+});
+</script>
+</body>
+</html>
